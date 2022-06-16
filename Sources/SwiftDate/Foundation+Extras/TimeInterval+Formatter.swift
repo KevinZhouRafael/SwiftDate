@@ -31,10 +31,10 @@ public extension TimeInterval {
 		public var maximumUnitCount: Int?
 
 		/// The formatting style for units whose value is 0.
-		public var zeroFormattingBehavior: DateComponentsFormatter.ZeroFormattingBehavior?
-
-		/// The preferred style for units.
-		public var unitsStyle: DateComponentsFormatter.UnitsStyle?
+//		public var zeroFormattingBehavior: DateComponentsFormatter.ZeroFormattingBehavior?
+//
+//		/// The preferred style for units.
+//		public var unitsStyle: DateComponentsFormatter.UnitsStyle?
 
 		/// Locale of the formatter
 		public var locale: LocaleConvertible? {
@@ -45,47 +45,47 @@ public extension TimeInterval {
 		/// Calendar
         public var calendar = Calendar.autoupdatingCurrent
 
-		public func apply(toFormatter formatter: DateComponentsFormatter) {
-            formatter.calendar = calendar
-
-            if let allowsFractionalUnits = self.allowsFractionalUnits {
-                formatter.allowsFractionalUnits = allowsFractionalUnits
-            }
-            if let allowedUnits = self.allowedUnits {
-                formatter.allowedUnits = allowedUnits
-            }
-            if let collapsesLargestUnit = self.collapsesLargestUnit {
-                formatter.collapsesLargestUnit = collapsesLargestUnit
-            }
-            if let maximumUnitCount = self.maximumUnitCount {
-                formatter.maximumUnitCount = maximumUnitCount
-            }
-            if let zeroFormattingBehavior = self.zeroFormattingBehavior {
-                formatter.zeroFormattingBehavior = zeroFormattingBehavior
-            }
-            if let unitsStyle = self.unitsStyle {
-                formatter.unitsStyle = unitsStyle
-            }
-		}
+//		public func apply(toFormatter formatter: DateComponentsFormatter) {
+//            formatter.calendar = calendar
+//
+//            if let allowsFractionalUnits = self.allowsFractionalUnits {
+//                formatter.allowsFractionalUnits = allowsFractionalUnits
+//            }
+//            if let allowedUnits = self.allowedUnits {
+//                formatter.allowedUnits = allowedUnits
+//            }
+//            if let collapsesLargestUnit = self.collapsesLargestUnit {
+//                formatter.collapsesLargestUnit = collapsesLargestUnit
+//            }
+//            if let maximumUnitCount = self.maximumUnitCount {
+//                formatter.maximumUnitCount = maximumUnitCount
+//            }
+//            if let zeroFormattingBehavior = self.zeroFormattingBehavior {
+//                formatter.zeroFormattingBehavior = zeroFormattingBehavior
+//            }
+//            if let unitsStyle = self.unitsStyle {
+//                formatter.unitsStyle = unitsStyle
+//            }
+//		}
 
 		public init() {}
 	}
 
 	/// Return the local thread shared formatter for date components
-	private static func sharedFormatter() -> DateComponentsFormatter {
-		let name = "SwiftDate_\(NSStringFromClass(DateComponentsFormatter.self))"
-		return threadSharedObject(key: name, create: {
-			let formatter = DateComponentsFormatter()
-			formatter.includesApproximationPhrase = false
-			formatter.includesTimeRemainingPhrase = false
-			return formatter
-		})
-	}
+//	private static func sharedFormatter() -> DateComponentsFormatter {
+//		let name = "SwiftDate_\(NSStringFromClass(DateComponentsFormatter.self))"
+//		return threadSharedObject(key: name, create: {
+//			let formatter = DateComponentsFormatter()
+//			formatter.includesApproximationPhrase = false
+//			formatter.includesTimeRemainingPhrase = false
+//			return formatter
+//		})
+//	}
 
 	//@available(*, deprecated: 5.0.13, obsoleted: 5.1, message: "Use toIntervalString function instead")
-	func toString(options callback: ((inout ComponentsFormatterOptions) -> Void)? = nil) -> String {
-		return self.toIntervalString(options: callback)
-	}
+//	func toString(options callback: ((inout ComponentsFormatterOptions) -> Void)? = nil) -> String {
+//		return self.toIntervalString(options: callback)
+//	}
 
 	/// Format a time interval in a string with desidered components with passed style.
 	///
@@ -93,46 +93,46 @@ public extension TimeInterval {
 	///   - units: units to include in string.
 	///   - style: style of the units, by default is `.abbreviated`
 	/// - Returns: string representation
-	func toIntervalString(options callback: ((inout ComponentsFormatterOptions) -> Void)? = nil) -> String {
-		let formatter = DateComponentsFormatter()
-		var options = ComponentsFormatterOptions()
-		callback?(&options)
-		options.apply(toFormatter: formatter)
-
-        let formattedValue = (formatter.string(from: self) ?? "")
-        if options.zeroFormattingBehavior?.contains(.pad) ?? false {
-            // for some strange reason padding is not added at the very beginning positional item.
-            // we'll add it manually if necessaru
-            if let index = formattedValue.firstIndex(of: ":"), index.utf16Offset(in: formattedValue) < 2 {
-                return "0\(formattedValue)"
-            }
-        }
-        return formattedValue
-	}
+//	func toIntervalString(options callback: ((inout ComponentsFormatterOptions) -> Void)? = nil) -> String {
+//		let formatter = DateComponentsFormatter()
+//		var options = ComponentsFormatterOptions()
+//		callback?(&options)
+//		options.apply(toFormatter: formatter)
+//
+//        let formattedValue = (formatter.string(from: self) ?? "")
+//        if options.zeroFormattingBehavior?.contains(.pad) ?? false {
+//            // for some strange reason padding is not added at the very beginning positional item.
+//            // we'll add it manually if necessaru
+//            if let index = formattedValue.firstIndex(of: ":"), index.utf16Offset(in: formattedValue) < 2 {
+//                return "0\(formattedValue)"
+//            }
+//        }
+//        return formattedValue
+//	}
 
 	/// Format a time interval in a string with desidered components with passed style.
 	///
 	/// - Parameter options: options for formatting.
 	/// - Returns: string representation
-	func toString(options: ComponentsFormatterOptions) -> String {
-		let formatter = TimeInterval.sharedFormatter()
-		options.apply(toFormatter: formatter)
-		return (formatter.string(from: self) ?? "")
-	}
+//	func toString(options: ComponentsFormatterOptions) -> String {
+//		let formatter = TimeInterval.sharedFormatter()
+//		options.apply(toFormatter: formatter)
+//		return (formatter.string(from: self) ?? "")
+//	}
 
 	/// Return a string representation of the time interval in form of clock countdown (ie. 57:00:00)
 	///
 	/// - Parameter zero: behaviour with zero.
 	/// - Returns: string representation
-	func toClock(zero: DateComponentsFormatter.ZeroFormattingBehavior =  [.pad, .dropLeading]) -> String {
-		return toIntervalString(options: {
-            $0.collapsesLargestUnit = true
-            $0.maximumUnitCount = 0
-			$0.unitsStyle = .positional
-            $0.locale = Locales.englishUnitedStatesComputer
-			$0.zeroFormattingBehavior = zero
-		})
-	}
+//	func toClock(zero: DateComponentsFormatter.ZeroFormattingBehavior =  [.pad, .dropLeading]) -> String {
+//		return toIntervalString(options: {
+//            $0.collapsesLargestUnit = true
+//            $0.maximumUnitCount = 0
+//			$0.unitsStyle = .positional
+//            $0.locale = Locales.englishUnitedStatesComputer
+//			$0.zeroFormattingBehavior = zero
+//		})
+//	}
 
 	/// Extract requeste time units components from given interval.
 	/// Reference date's calendar is used to make the extraction.
